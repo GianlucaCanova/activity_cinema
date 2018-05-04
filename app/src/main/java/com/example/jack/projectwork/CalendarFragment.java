@@ -46,22 +46,28 @@ import com.example.jack.projectwork.DescrizioneActivity;
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View vView = inflater.inflate(R.layout.calendarl, null);
             final CalendarView calendar = vView.findViewById(R.id.calendarView);
+
             calendar.startAnimation(AnimationUtils.loadAnimation(getContext(),
                     R.anim.slide_up_anim));
             //String data_corr= dat.getDate()+ “/” + dat.getMonth() + “/” + dat.getFullYear()
+            //SETTA PRIMO GIORNO
             Date data = new Date();
             long mills = data.getTime();
             calendar.setMinDate(mills);
+            // SETTA ULTIMO GIORNO
             SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
             try {
                 Date d = f.parse("25/05/2018");
                 long milliseconds = d.getTime();
                 calendar.setMaxDate(milliseconds);
+
             } catch (ParseException e) {
                 Log.i("CalendarFragment:", "Data sbagliata");
             }
-            SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String formatedDate = newFormat.format(((int) calendar.getDate()));
+
+
+      //      SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //    String formatedDate = newFormat.format(((int) calendar.getDate()));
             //text.setText(formatedDate);
             calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -70,8 +76,8 @@ import com.example.jack.projectwork.DescrizioneActivity;
                     interrogazione.setVisibility(View.INVISIBLE);
                     numGiorno.setText("" + dayOfMonth);
                     //int dayOfWeek=Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-                    SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE");         // SI TRATTA DI UN GIORNO DELLA SETTIMANA
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");  // RECUPERARE DATA CHE SIA D/M/A
                     Date d=new Date(year,(month+1),dayOfMonth);
                     try {
                         d = sdf2.parse(dayOfMonth+"/"+(month+1)+"/"+year);
@@ -113,6 +119,9 @@ import com.example.jack.projectwork.DescrizioneActivity;
                     giorno.setText(day);
                     giorno.setVisibility(View.VISIBLE);
                     numGiorno.setVisibility(View.VISIBLE);
+
+
+                    //ANIMAZIONI APERTURA E CHIUSURA
                     Animation an = AnimationUtils.loadAnimation(getContext(),
                             R.anim.slide_down_anim);
 

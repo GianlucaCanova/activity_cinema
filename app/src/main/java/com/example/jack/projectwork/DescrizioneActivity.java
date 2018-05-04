@@ -1,5 +1,6 @@
 package com.example.jack.projectwork;
-
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -48,6 +49,7 @@ public class DescrizioneActivity extends AppCompatActivity {
             vTransaction.replace(R.id.fragment_zone ,new FragmentDescHor());
         }
         vTransaction.commit();
+
         fragment=null;
         if (savedInstanceState != null) {
             String savedText = savedInstanceState.getString(GIORNO);
@@ -118,11 +120,37 @@ public class DescrizioneActivity extends AppCompatActivity {
                     vTransaction.replace(R.id.fragment_zone, fCalendar);
 
                     vTransaction.commit();
-                    fragment.setRetainInstance(true);
-                    calendario = true;
+                    fragment.setRetainInstance(true); // salva stato fragment
+                    calendario = true;                // controllare imageview per aprirla o chiuderla ( se lo premi true se no false e lo chiude)
                 }
                 else{
-                    fragmentDesc();
+                    android.widget.CalendarView calendar = findViewById(R.id.calendarView);
+                      calendar.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.slide_down_anim));
+
+                    Animation an = AnimationUtils.loadAnimation(getApplicationContext(),
+                            R.anim.slide_down_anim);
+
+                    an.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                           fragmentDesc();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+
+                    });
+                    fragment.getView().startAnimation(an);
+
+
                 }
 
             }
@@ -137,36 +165,23 @@ public class DescrizioneActivity extends AppCompatActivity {
     }*/
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() {            // METODO DELL'ACTIVITY
         if(calendario){
-            fragmentDesc();
+            fragmentDesc();                 // RICHIAMA FRAGMENT
 
         }
         else{
-            super.onBackPressed();
+            super.onBackPressed();         // TORNA ALL'INIZIO
         }
 
 
     }
 
-    public void setLayout(){
-        setContentView(R.layout.layout_alternativo);
-        FragmentTransaction vTransaction= mManager.beginTransaction();
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-            vTransaction.replace(R.id.fragment_zone ,new Fragment_alt());
-        }
-        else{
-
-            vTransaction.replace(R.id.fragment_zone ,new FragmentDescHor());
-        }
-        fragment=null;
-        vTransaction.commit();
-    }
 
     public void fragmentDesc(){
         FragmentTransaction vTransaction= mManager.beginTransaction();
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {                // QUANDO è verticale mette un fragm quando è orizzontale mette un'altro
 
             vTransaction.replace(R.id.fragment_zone ,new Fragment_alt());
         }
@@ -198,6 +213,10 @@ public class DescrizioneActivity extends AppCompatActivity {
             //fragmentDesc();
             super.onSaveInstanceState(outState);
     }
+
+
+
+
 
 
 }
